@@ -1,0 +1,129 @@
+.mat-stepper-vertical {
+  margin-top: 8px;
+}
+
+.mat-form-field {
+  margin-top: 16px;
+}
+
+.mattree {
+  border: 1px solid;
+  width: 105%;
+  background: #e0e0e033;
+  margin-bottom: 25px;
+}
+
+.analyse {
+  display: flex;
+}
+
+.btn {
+  width: 8%;
+  margin-left: 50px;
+  margin-top: 34px;
+  margin-bottom: 5px;
+}
+
+.bt {
+  margin-bottom: 10px;
+  padding-inline: 26px;
+}
+
+.typedp {
+  display: inline-block;
+  margin-left: 63px !important;
+}
+
+.rightform {
+  display: inline-block;
+  width: 520px;
+}
+
+.middleform {
+  width: 30%;
+  display: inline-block;
+}
+.leftform {
+  width: 50%;
+  display: inline-block;
+}
+
+.secondInput {
+  margin-left: 45px !important;
+}
+
+.example-full-width {
+  width: 90%;
+  display: block;
+}
+
+.cmt {
+  display: grid;
+  width: 56%;
+  margin-left: -47px;
+}
+
+.mat-column-demo-position {
+  width: 32px;
+  border-right: 1px solid currentColor;
+  padding-right: 24px;
+  text-align: center;
+}
+
+th.mat-header-cell,
+td.mat-cell,
+td.mat-footer-cell {
+  padding: 10px;
+  overflow: auto;
+}
+
+.mat-vertical-content {
+  overflow: auto !important;
+}
+
+::ng-deep .mat-vertical-stepper-content {
+  overflow: auto !important;
+}
+
+::ng-deep
+  th.mat-header-cell.cdk-header-cell.barAnalys.cdk-column-slot.mat-column-slot.ng-star-inserted {
+  border-right-color: black !important;
+  border-right-width: 5px !important;
+  border-right-style: double;
+}
+
+::ng-deep
+  td.mat-cell.cdk-cell.cdk-column-slot.mat-column-slot.ng-star-inserted {
+  border-right-color: black !important;
+  border-right-width: 5px !important;
+  border-right-style: double;
+}
+
+::ng-deep
+  th.mat-header-cell.cdk-header-cell.barAnalys.cdk-column-lst.mat-column-lst.ng-star-inserted {
+  border-right-color: black !important;
+  border-right-width: 5px !important;
+  border-right-style: double;
+}
+
+::ng-deep td.mat-cell.cdk-cell.cdk-column-lst.mat-column-lst.ng-star-inserted {
+  border-right-color: black !important;
+  border-right-width: 5px !important;
+  border-right-style: double;
+}
+
+::ng-deep th.analysColor {
+  background-color: aliceblue;
+}
+
+::ng-deep td.redColor {
+  background-color: red;
+}
+
+::ng-deep td.greenColor {
+  background-color: #a8dab5;
+}
+
+.displayNone {
+  display: none;
+}

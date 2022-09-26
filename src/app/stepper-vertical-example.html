@@ -1,0 +1,341 @@
+<button mat-raised-button (click)="isLinear = !isLinear" id="toggle-linear">
+  {{!isLinear ? 'Enable linear mode' : 'Disable linear mode'}}
+</button>
+<mat-stepper orientation="vertical" [linear]="isLinear" #stepper>
+  <mat-step [stepControl]="firstFormGroup">
+    <form [formGroup]="firstFormGroup">
+      <ng-template matStepLabel>Scanner carrier ID ou lot ID</ng-template>
+      <mat-form-field appearance="fill">
+        <mat-label>Scanner carrier ID ou Lot ID</mat-label>
+        <input
+          matInput
+          placeholder=""
+          (keyup)="change($event)"
+          formControlName="firstCtrl"
+          required
+        />
+      </mat-form-field>
+      <div class="typedp">
+        <p>Type de dépôt</p>
+        <mat-slide-toggle
+          class="example-margin"
+          [color]="color"
+          [checked]="checked"
+          (change)="typedpcheck()"
+          [disabled]="true"
+        >
+          {{typedp}}
+        </mat-slide-toggle>
+      </div>
+      <div>
+        <button mat-raised-button matStepperNext color="primary">
+          Suivant
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step *ngIf="!checked" [stepControl]="secondFormGroup">
+    <form [formGroup]="secondFormGroup">
+      <ng-template matStepLabel>Information du demandeur</ng-template>
+      <div class="rightform">
+        <mat-form-field appearance="fill">
+          <mat-label>Département demandeur</mat-label>
+          <input
+            matInput
+            placeholder=""
+            formControlName="RequestorDep"
+            required
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="secondInput">
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="" formControlName="Name" required />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Adresse e-mail</mat-label>
+          <input
+            type="email"
+            matInput
+            [errorStateMatcher]="matcher"
+            placeholder="Ex. pat@soitec.com"
+            [formControl]="emailFormControl"
+            required
+          />
+          <mat-hint>Errors appear instantly!</mat-hint>
+          <mat-error
+            *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')"
+          >
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="emailFormControl.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="secondInput">
+          <mat-label>Phone</mat-label>
+          <input
+            type="tel"
+            matInput
+            placeholder=""
+            formControlName="phone"
+            required
+          />
+        </mat-form-field>
+      </div>
+      <div class="leftform">
+        <mat-form-field appearance="fill">
+          <mat-label>Process</mat-label>
+          <select matNativeControl required>
+            <option value="volvo">P0ETR</option>
+            <option value="saab">P0ELR4</option>
+            <option value="mercedes">ESI70</option>
+            <option value="audi">POD</option>
+            <option value="audi">P6G</option>
+            <option value="audi">P5ITS</option>
+            <option value="Other">Other</option>
+          </select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="secondInput">
+          <mat-label>date de résultat souhaitée</mat-label>
+          <input matInput [matDatepicker]="picker" />
+          <mat-hint>MM/DD/YYYY</mat-hint>
+          <mat-datepicker-toggle
+            matSuffix
+            [for]="picker"
+          ></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Décrivez vos besoins</mat-label>
+          <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+        </mat-form-field>
+      </div>
+      <div class="middleform">
+        <mat-form-field appearance="fill">
+          <mat-label>Code projet</mat-label>
+          <input
+            matInput
+            placeholder=""
+            [disabled]="false"
+            formControlName="Name"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="secondInput">
+          <mat-label>Wafers informations</mat-label>
+          <input
+            matInput
+            placeholder="Lien google drive"
+            formControlName="Phone"
+          />
+        </mat-form-field>
+        <mat-form-field appearance="fill">
+          <mat-label>Justification</mat-label>
+          <select matNativeControl (change)="choise($event)" required>
+            <option value="volvo">Process developpment</option>
+            <option value="saab">Expedition</option>
+            <option value="mercedes">Customer clain</option>
+            <option value="audi">PCQR</option>
+            <option value="audi">PCRB</option>
+            <option value="audi">Other</option>
+          </select>
+        </mat-form-field>
+          <div *ngIf="disabledJustif" class="cmt">
+            <mat-form-field
+              class="example-full-width"
+              appearance="fill"
+              class="secondInput"
+            >
+              <mat-label>Si Others</mat-label>
+              <textarea matInput placeholder="Ex. It makes me feel..."></textarea>
+            </mat-form-field>
+          </div>
+      </div>
+      <div>
+        <button mat-button matStepperPrevious>Retour</button>
+        <button mat-raised-button matStepperNext color="primary">
+          Suivant
+        </button>
+      </div>
+    </form>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Configuration du dépôt</ng-template>
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!--- Note that these columns can be defined in any order.
+            The actual rendered columns are set as a property on the row definition" -->
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="compId">
+        <th mat-header-cell *matHeaderCellDef>CompId</th>
+        <td mat-cell *matCellDef="let element">{{element.compId}}</td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="lotId">
+        <th mat-header-cell *matHeaderCellDef>LotID</th>
+        <td mat-cell *matCellDef="let element">{{element.lotId}}</td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="laserMark">
+        <th mat-header-cell *matHeaderCellDef>LM</th>
+        <td mat-cell *matCellDef="let element">{{element.laserMark}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="partID">
+        <th mat-header-cell *matHeaderCellDef>PartID</th>
+        <td mat-cell *matCellDef="let element">{{element.partID}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="si">
+        <th mat-header-cell *matHeaderCellDef>Si èp (A)</th>
+        <td mat-cell *matCellDef="let element">{{element.si}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="sio2">
+        <th mat-header-cell *matHeaderCellDef>SiO2 èp (A)</th>
+        <td mat-cell *matCellDef="let element">{{element.sio2}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="process">
+        <th mat-header-cell *matHeaderCellDef>Process</th>
+        <td mat-cell *matCellDef="let element">{{element.process}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="slot">
+        <th mat-header-cell *matHeaderCellDef class="barAnalys">Slot</th>
+        <td mat-cell *matCellDef="let element">{{element.slot}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="bso">
+        <th mat-header-cell *matHeaderCellDef class="analysColor">BSO/WC</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{'greenColor' : element.bso === true, 'redColor' : element.bso === false}"
+        >
+          <mat-icon *ngIf="element.bso">done</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="psimos">
+        <th mat-header-cell *matHeaderCellDef class="analysColor">PSIMOS</th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon *ngIf="element.psimos">done</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="vbd">
+        <th mat-header-cell *matHeaderCellDef class="analysColor">VBD</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{'greenColor' : element.vbd === true, 'redColor' : element.vbd === false}"
+          (click)="check(element)"
+        >
+          <mat-icon *ngIf="element.vbd">done</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="secco">
+        <th mat-header-cell *matHeaderCellDef class="analysColor">SECCO</th>
+        <td
+          mat-cell
+          *matCellDef="let element"
+          [ngClass]="{'greenColor' : element.secco === true, 'redColor' : element.secco === false}"
+        >
+          <mat-icon *ngIf="element.secco">done</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="lst">
+        <th mat-header-cell *matHeaderCellDef class="barAnalys analysColor">
+          LST
+        </th>
+        <td mat-cell *matCellDef="let element">
+          <mat-icon *ngIf="element.lst">done</mat-icon>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="lotType">
+        <th mat-header-cell *matHeaderCellDef>LotType</th>
+        <td mat-cell *matCellDef="let element">{{element.lotType}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="stage">
+        <th mat-header-cell *matHeaderCellDef>STAGE</th>
+        <td mat-cell *matCellDef="let element">{{element.stage}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="esi">
+        <th mat-header-cell *matHeaderCellDef>ESI_MESUREE</th>
+        <td mat-cell *matCellDef="let element">{{element.esi}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="esio">
+        <th mat-header-cell *matHeaderCellDef>ESIO2_MESUREE</th>
+        <td mat-cell *matCellDef="let element">{{element.esio}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="am">
+        <th mat-header-cell *matHeaderCellDef>AMEQP</th>
+        <td mat-cell *matCellDef="let element">{{element.am}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="lotcmnt">
+        <th mat-header-cell *matHeaderCellDef>LOTCMNT</th>
+        <td mat-cell *matCellDef="let element">{{element.lotcmnt}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="engineer">
+        <th mat-header-cell *matHeaderCellDef>EIF</th>
+        <td mat-cell *matCellDef="let element">{{element.engineer}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="supplier">
+        <th mat-header-cell *matHeaderCellDef>SUPPLIER</th>
+        <td mat-cell *matCellDef="let element">{{element.supplier}}</td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="partbu">
+        <th mat-header-cell *matHeaderCellDef>PART_BULK_BASE</th>
+        <td mat-cell *matCellDef="let element">{{element.partbu}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div>
+      <button mat-button matStepperPrevious>Retour</button>
+      <button mat-raised-button matStepperNext color="warn" class="btn">
+        Imprimer
+      </button>
+      <button mat-raised-button matStepperNext color="primary" class="btn">
+        Déposer
+      </button>
+    </div>
+  </mat-step>
+</mat-stepper>
+
+<!-- Copyright 2022 Google LLC. All Rights Reserved.
+    Use of this source code is governed by an MIT-style license that
+    can be found in the LICENSE file at https://angular.io/license -->
